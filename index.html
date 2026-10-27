@@ -168,7 +168,7 @@ h1{margin:0;font:400 1.9rem/1 var(--hand);letter-spacing:.09em;text-transform:up
 <aside class="rec box" aria-label="recommendations"><span class="gl" aria-hidden="true" title="ankh">𓋹</span>got a song, film or anything else i should try? <a href="mailto:harshinisuresha7@gmail.com?subject=recommendation%20for%20my.corner&body=what%20is%20it%3A%20%0Aby%20who%3A%20%0Awhy%20i%20love%20it%3A%20">send me a recommendation</a> and i’ll add it here.</aside>
 <form id="login" class="panel box" hidden>
 <input name="e" type="email" placeholder="your email" required autocomplete="username" aria-label="email">
-<input name="p" type="password" placeholder="password" required autocomplete="current-password" aria-label="password">
+<input name="p" type="password" placeholder="password" autocomplete="current-password" aria-label="password">
 <p id="lnote" role="status"></p>
 <div class="btns"><button class="btn" type="submit">sign in</button><button class="ghost" id="lcancel" type="button">never mind</button></div>
 </form>
@@ -298,7 +298,10 @@ plus.hidden=!(sb&&flag);
 const shut=()=>{f.reset();f.hidden=true;lg.hidden=true;plus.setAttribute('aria-expanded','false')};
 plus.onclick=()=>{if(!f.hidden||!lg.hidden){shut();return}const p=sess?f:lg;p.hidden=false;plus.setAttribute('aria-expanded','true');p.scrollIntoView({block:'center'});p.querySelector('input').focus()};
 $('#cancel').onclick=shut;$('#lcancel').onclick=shut;
-lg.onsubmit=async e=>{e.preventDefault();const n=$('#lnote');n.textContent='signing in…';try{const r=await fetch(SB_URL+'/auth/v1/token?grant_type=password',{method:'POST',headers:hd(),body:JSON.stringify({email:lg.e.value.trim(),password:lg.p.value})});if(!r.ok){const j=await r.json().catch(()=>({}));throw j.error_description||j.msg||j.message||('error '+r.status)}setSess(await r.json());lg.reset();n.textContent='';lg.hidden=true;f.hidden=false;f.t.focus();render()}catch(x){n.textContent=typeof x==='string'?'supabase says: '+x:'couldn’t reach supabase, check the project url in index.html'}};
+lg.onsubmit=async e=>{e.preventDefault();const n=$('#lnote'),em=lg.e.value.trim();
+if(em.toLowerCase()!==EM){n.textContent='sending your request to harshini…';if(sb){try{await fetch(SB_URL+'/rest/v1/seats',{method:'POST',headers:{...hd(),Prefer:'return=minimal'},body:JSON.stringify({email:em})})}catch(x){}}n.textContent='request sent to harshini! opening your mail app so it reaches her too…';location.href='mailto:'+EM+'?subject='+encodeURIComponent('my.corner access request')+'&body='+encodeURIComponent('hi harshini, please let me into my.corner.\n\nmy email: '+em);lg.reset();return}
+if(!lg.p.value){n.textContent='enter your password';return}
+n.textContent='signing in…';try{const r=await fetch(SB_URL+'/auth/v1/token?grant_type=password',{method:'POST',headers:hd(),body:JSON.stringify({email:em,password:lg.p.value})});if(!r.ok){const j=await r.json().catch(()=>({}));throw j.error_description||j.msg||j.message||('error '+r.status)}setSess(await r.json());lg.reset();n.textContent='';lg.hidden=true;f.hidden=false;f.t.focus();render()}catch(x){n.textContent=typeof x==='string'?'supabase says: '+x:'couldn’t reach supabase, check the project url in index.html'}};
 function shrink(file){return new Promise(r=>{const fr=new FileReader();fr.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,900/im.width),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);c.toBlob(bl=>r(bl?{blob:bl,w:c.width,h:c.height}:null),'image/jpeg',.88)};im.onerror=()=>r(null);im.src=fr.result};fr.onerror=()=>r(null);fr.readAsDataURL(file)})}
 f.onsubmit=async e=>{
 e.preventDefault();const bt=f.querySelector('.btn'),n=$('#fnote');bt.disabled=true;n.textContent='posting…';
