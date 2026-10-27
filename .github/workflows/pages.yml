@@ -28,7 +28,7 @@ jobs:
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
         run: |
           mkdir -p _site
-          cp -r index.html images CNAME _site/
+          cp -r index.html images _site/
           printf "window.CONFIG={SB_URL:'%s',SB_KEY:'%s'};\n" "$SUPABASE_URL" "$SUPABASE_KEY" > _site/config.js
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
