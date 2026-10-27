@@ -194,6 +194,7 @@ h1{margin:0;font:400 1.9rem/1 var(--hand);letter-spacing:.09em;text-transform:up
 <button type="button" id="plus" hidden aria-label="new entry" title="new entry" aria-expanded="false" aria-controls="add"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
 </div>
 <div id="lb" role="dialog" aria-modal="true" aria-label="enlarged picture" hidden><img alt=""></div>
+<script src="config.js"></script>
 <script>
 (function(){
 const INK='#2a0b1d';
@@ -228,7 +229,7 @@ const BASE=[
 {d:'2026-10-25',t:'first scribble',tag:'scribbles',b:''},
 {d:'2026-10-25',t:'you should try this',tag:'i love this',b:''},
 ];
-const SB_URL='',SB_KEY='REMOVED_KEY';
+const CFG=window.CONFIG||{},SB_URL=CFG.SB_URL||'',SB_KEY=CFG.SB_KEY||'';
 const sb=!!(SB_URL&&SB_KEY),EM='harshinisuresha7@gmail.com';
 const VK='my-corner:view',SO='my-corner:sort',SK='my-corner:session',MK='my-corner:me';
 let remote=[],cur='everything',view='grid',asc=false,hint=null,sess=null,flag=false;
